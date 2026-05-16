@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -16,6 +17,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -66,7 +68,10 @@ fun ReshmeNammaPrideApp(textToSpeech: TextToSpeech) {
 
     when (currentScreen) {
         "splash" -> SplashScreen(onNavigate = { currentScreen = it })
-        "home" -> HomeScreen(onNavigate = { currentScreen = it })
+        "home" -> HomeScreen(
+            onNavigate = { currentScreen = it },
+            textToSpeech = textToSpeech
+        )
         "menu" -> MenuScreen(onNavigate = { currentScreen = it })
         "batch" -> BatchScreen(
             batchName = batchName,
@@ -171,7 +176,10 @@ fun SplashScreen(onNavigate: (String) -> Unit) {
 }
 
 @Composable
-fun HomeScreen(onNavigate: (String) -> Unit) {
+fun HomeScreen(
+    onNavigate: (String) -> Unit,
+    textToSpeech: TextToSpeech
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -253,9 +261,63 @@ fun HomeScreen(onNavigate: (String) -> Unit) {
             }
         }
         Spacer(modifier = Modifier.height(32.dp))
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .shadow(10.dp, RoundedCornerShape(16.dp)),
+            colors = CardDefaults.cardColors(containerColor = RoseGoldCard),
+            shape = RoundedCornerShape(16.dp),
+            border = BorderStroke(1.dp, RoseGoldLight)
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+
+                Text(
+                    text = "💡 Farmer Inspiration",
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = RoseGoldPale
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = "\"Healthy silkworms create golden cocoons\"",
+                    fontSize = 13.sp,
+                    color = RoseGoldLight,
+                    textAlign = TextAlign.Center
+                )
+
+                Spacer(modifier = Modifier.height(6.dp))
+
+                Text(
+                    text = "\"ಆರೋಗ್ಯಕರ ರೇಷ್ಮೆ ಹುಳುಗಳು ಚಿನ್ನದ ಗೂಡುಗಳನ್ನು ಸೃಷ್ಟಿಸುತ್ತವೆ.\"",
+                    fontSize = 13.sp,
+                    color = CyanAccent,
+                    textAlign = TextAlign.Center
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
         Button(
-            onClick = { onNavigate("menu") },
-            modifier = Modifier.fillMaxWidth().height(56.dp),
+            onClick = {
+
+                textToSpeech.speak(
+                    "ರೇಷ್ಮೆ ನಮ್ಮ ಹೆಮ್ಮೆಗೆ ಸ್ವಾಗತ",
+                    TextToSpeech.QUEUE_FLUSH,
+                    null,
+                    null
+                )
+
+                onNavigate("menu")
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp)
+                .shadow(12.dp, RoundedCornerShape(12.dp)),
             colors = ButtonDefaults.buttonColors(containerColor = RoseGoldButton),
             shape = RoundedCornerShape(12.dp)
         ) {
@@ -273,7 +335,15 @@ fun HomeScreen(onNavigate: (String) -> Unit) {
             color = RoseGoldMid,
             textAlign = TextAlign.Center
         )
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Text(
+            text = "Powered by Karnataka Sericulture Innovation 🌿",
+            fontSize = 10.sp,
+            color = RoseGoldMid,
+            textAlign = TextAlign.Center
+        )
+
     }
 }
 
@@ -354,7 +424,10 @@ fun MenuScreen(onNavigate: (String) -> Unit) {
         Spacer(modifier = Modifier.height(16.dp))
         Button(
             onClick = { onNavigate("guide") },
-            modifier = Modifier.fillMaxWidth().height(64.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(64.dp)
+                .shadow(12.dp, RoundedCornerShape(16.dp)),
             colors = ButtonDefaults.buttonColors(containerColor = RoseGoldCard),
             shape = RoundedCornerShape(16.dp)
         ) {
@@ -376,6 +449,14 @@ fun MenuScreen(onNavigate: (String) -> Unit) {
         TextButton(onClick = { onNavigate("home") }) {
             Text(text = "← Back to Home | ಮನೆಗೆ ಹಿಂತಿರುಗಿ", color = RoseGoldLight)
         }
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Text(
+            text = "Powered by Karnataka Sericulture Innovation 🌿",
+            fontSize = 10.sp,
+            color = RoseGoldMid,
+            textAlign = TextAlign.Center
+        )
     }
 }
 
@@ -511,6 +592,42 @@ fun BatchScreen(
             }
         }
         Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .shadow(10.dp, RoundedCornerShape(16.dp)),
+            colors = CardDefaults.cardColors(containerColor = Color(0xFF5D4037)),
+            shape = RoundedCornerShape(16.dp)
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+
+                Text(
+                    text = "📋 Batch Summary",
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = RoseGoldPale
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = "Batch: $batchName",
+                    color = RoseGoldLight
+                )
+
+                Text(
+                    text = "Date: $batchDate",
+                    color = RoseGoldLight
+                )
+
+                Text(
+                    text = "Instar Stage: $instarStage",
+                    color = CyanAccent
+                )
+            }
+        }
         Button(
             onClick = { onNavigate("climate") },
             modifier = Modifier.fillMaxWidth().height(56.dp),
@@ -528,6 +645,14 @@ fun BatchScreen(
         TextButton(onClick = { onNavigate("menu") }) {
             Text(text = "← Back | ಹಿಂತಿರುಗಿ", color = RoseGoldLight)
         }
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Text(
+            text = "Powered by Karnataka Sericulture Innovation 🌿",
+            fontSize = 10.sp,
+            color = RoseGoldMid,
+            textAlign = TextAlign.Center
+        )
     }
 }
 
@@ -622,6 +747,7 @@ fun ClimateScreen(
     onNavigate: (String) -> Unit
 ) {
     val context = LocalContext.current
+    val liveStatus = getLiveStatus(temperature, humidity)
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -676,6 +802,14 @@ fun ClimateScreen(
                 unfocusedBorderColor = RoseGoldMid
             )
         )
+        Spacer(modifier = Modifier.height(12.dp))
+
+        Text(
+            text = liveStatus,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold,
+            color = CyanAccent
+        )
         Spacer(modifier = Modifier.height(24.dp))
         Button(
             onClick = {
@@ -716,7 +850,10 @@ fun ClimateScreen(
                     }
                 }
             },
-            modifier = Modifier.fillMaxWidth().height(56.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(64.dp)
+                .shadow(12.dp, RoundedCornerShape(16.dp)),
             colors = ButtonDefaults.buttonColors(containerColor = RoseGoldButton),
             shape = RoundedCornerShape(12.dp)
         ) {
@@ -731,6 +868,14 @@ fun ClimateScreen(
         TextButton(onClick = { onNavigate("batch") }) {
             Text(text = "← Back | ಹಿಂತಿರುಗಿ", color = RoseGoldLight)
         }
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Text(
+            text = "Powered by Karnataka Sericulture Innovation 🌿",
+            fontSize = 10.sp,
+            color = RoseGoldMid,
+            textAlign = TextAlign.Center
+        )
     }
 }
 
@@ -763,6 +908,20 @@ fun AdviceScreen(
             textAlign = TextAlign.Center
         )
         Spacer(modifier = Modifier.height(24.dp))
+        LinearProgressIndicator(
+            progress = when (dialColor) {
+                Color.Green -> 0.2f
+                Color(0xFFFFA500) -> 0.6f
+                else -> 1f
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(10.dp),
+            color = dialColor,
+            trackColor = Color.DarkGray
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
         Box(
             modifier = Modifier
                 .size(160.dp)
@@ -783,9 +942,12 @@ fun AdviceScreen(
         }
         Spacer(modifier = Modifier.height(24.dp))
         Card(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .shadow(10.dp, RoundedCornerShape(16.dp)),
             colors = CardDefaults.cardColors(containerColor = RoseGoldCard),
-            shape = RoundedCornerShape(16.dp)
+            shape = RoundedCornerShape(16.dp),
+            border = BorderStroke(1.dp, RoseGoldLight)
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
@@ -808,6 +970,33 @@ fun AdviceScreen(
             }
         }
         Spacer(modifier = Modifier.height(16.dp))
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(containerColor = Color(0xFF37474F)),
+            shape = RoundedCornerShape(16.dp)
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+
+                Text(
+                    text = "🩺 Health Tips",
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = RoseGoldPale
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text =
+                        "• Clean trays daily\n" +
+                                "• Remove unhealthy worms\n" +
+                                "• Maintain ventilation\n" +
+                                "• Use fresh mulberry leaves",
+                    color = RoseGoldLight,
+                    lineHeight = 22.sp
+                )
+            }
+        }
         Button(
             onClick = {
                 textToSpeech.speak(
@@ -817,7 +1006,10 @@ fun AdviceScreen(
                     null
                 )
             },
-            modifier = Modifier.fillMaxWidth().height(56.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(64.dp)
+                .shadow(12.dp, RoundedCornerShape(16.dp)),
             colors = ButtonDefaults.buttonColors(containerColor = RoseGoldCard),
             shape = RoundedCornerShape(12.dp)
         ) {
@@ -846,6 +1038,14 @@ fun AdviceScreen(
         TextButton(onClick = { onNavigate("home") }) {
             Text(text = "🏠 Back to Home | ಮನೆಗೆ ಹಿಂತಿರುಗಿ", color = RoseGoldLight)
         }
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Text(
+            text = "Powered by Karnataka Sericulture Innovation 🌿",
+            fontSize = 10.sp,
+            color = RoseGoldMid,
+            textAlign = TextAlign.Center
+        )
     }
 }
 
@@ -911,13 +1111,23 @@ fun HowToMeasureScreen(onNavigate: (String) -> Unit) {
                 color = RoseGoldLight
             )
         }
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Text(
+            text = "Powered by Karnataka Sericulture Innovation 🌿",
+            fontSize = 10.sp,
+            color = RoseGoldMid,
+            textAlign = TextAlign.Center
+        )
     }
 }
 
 @Composable
 fun GuideCard(emoji: String, title: String, steps: String) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .shadow(10.dp, RoundedCornerShape(16.dp)),
         colors = CardDefaults.cardColors(containerColor = RoseGoldCard),
         shape = RoundedCornerShape(16.dp)
     ) {
@@ -1053,7 +1263,10 @@ fun CocoonTimerScreen(
                     }
                 }
             },
-            modifier = Modifier.fillMaxWidth().height(56.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(64.dp)
+                .shadow(12.dp, RoundedCornerShape(16.dp)),
             colors = ButtonDefaults.buttonColors(containerColor = RoseGoldButton),
             shape = RoundedCornerShape(12.dp)
         ) {
@@ -1133,9 +1346,27 @@ fun CocoonTimerScreen(
                 color = RoseGoldLight
             )
         }
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Text(
+            text = "Powered by Karnataka Sericulture Innovation 🌿",
+            fontSize = 10.sp,
+            color = RoseGoldMid,
+            textAlign = TextAlign.Center
+        )
     }
 }
+fun getLiveStatus(temp: String, hum: String): String {
+    val t = temp.toFloatOrNull()
+    val h = hum.toFloatOrNull()
 
+    return when {
+        t == null || h == null -> "⌛ Enter values"
+        t in 24f..28f && h in 70f..90f -> "✅ Climate Good"
+        t > 32f || h > 90f -> "🚨 Dangerous"
+        else -> "⚠️ Need Attention"
+    }
+}
 fun getAdvice(temp: Float, hum: Float, instar: Int): Triple<String, String, Color> {
     val idealTemp = when (instar) {
         1 -> Pair(26f, 28f)
